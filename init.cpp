@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include "sim.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT= 480;
@@ -16,7 +17,7 @@ bool init()
         printf("SDL ERRORL %s\n",SDL_GetError());
         success = false;
     } else {
-        gWindow = SDL_CreateWindow("Stock Simulator 2015", SDL_WINDOWPOS_UNDEFINED,
+        gWindow = SDL_CreateWindow("Stock Market Simulator 2015", SDL_WINDOWPOS_UNDEFINED,
          SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if(gWindow == NULL) {
             printf("Window Could not be created! SDL_ERROR: %s\n",SDL_GetError());
@@ -25,6 +26,27 @@ bool init()
             gScreenSurface = SDL_GetWindowSurface(gWindow);
         }
     }
+
+    SDL_UpdateWindowSurface(gWindow);
+	// Startup Menus!
+	fstring* title = new fstring();
+	fstring* intro = new fstring();
+	fstring* intro2 = new fstring();
+	fstring* intro3 = new fstring();
+	title->setPosition(150,50);
+		title->setText("stock market simulator 2015", true);
+	intro->setPosition(180,100);
+		intro->setText("collect the green stocks", true);
+	intro2->setPosition(200,120);	
+		intro2->setText("destroy the red ones", true);
+	intro3->setPosition(250,140);
+		intro3->setText("good luck", true);
+	title->redraw();	
+	intro->redraw();
+	intro2->redraw();
+	intro3->redraw();
+	SDL_UpdateWindowSurface(gWindow);
+	SDL_Delay(7000);
     return success;
 }
 
