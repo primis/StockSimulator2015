@@ -10,6 +10,8 @@ extern SDL_Surface *broker;
 
 void close();
 
+SDL_Rect brokerLoc;
+
 int main()
 {
     bool quit = false;
@@ -24,7 +26,10 @@ int main()
             SDL_UpdateWindowSurface(gWindow);
         }
     }
-    
+    brokerLoc.w = 64;
+    brokerLoc.h = 64;
+    brokerLoc.x = 200;
+    brokerLoc.y = 200;
     while(!quit) {
         while(SDL_PollEvent(&e) != 0){
             //User Requested a quit
@@ -32,7 +37,7 @@ int main()
                 quit = true;
             }
         }
-        SDL_BlitSurface(broker, NULL, gScreenSurface, NULL);
+        SDL_BlitSurface(broker, NULL, gScreenSurface, &brokerLoc);
         SDL_UpdateWindowSurface(gWindow);
     }
     close();
