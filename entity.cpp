@@ -21,6 +21,11 @@ entity::entity()
 		 printf( "Unable to load image. SDL Error: %s\n", SDL_GetError() );
 	}
 }
+void entity::setSize(int w, int h)
+{
+	location.h = h;
+	location.w = w;
+}
 void entity::setBitmap(const char *bit)
 {
 	SDL_FreeSurface(bitmap);

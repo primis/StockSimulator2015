@@ -10,6 +10,7 @@ extern SDL_Window *gWindow;
 extern SDL_Surface *gScreenSurface;
 extern entity *broker;
 extern background *bg;
+extern entity *bullet;
 void close();
 
 
@@ -28,6 +29,8 @@ int main()
     broker->redraw();
     int posX=0;
 	int posY=200;
+	int BposX, BposY;
+	bool shooting = false;
 	broker->setPosition(posX,posY);
     SDL_UpdateWindowSurface(gWindow);    
 	while(!quit) {
@@ -54,10 +57,29 @@ int main()
 		{
 			posX++;
 		}
-        broker->setPosition(posX,posY);
+		if(currentKeyStates[SDL_SCANCODE_SPACE])
+		{
+			shooting = true;
+			BposX = posX+2;
+			BposY = posY+2;
+		}
+
+		// Render Time, 1 ms delay.
+	//	SDL_Delay(1);
+        broker->setPosition(posX,posY);		
+		bullet->setPosition(BposX,BposY++);
         bg->redraw();
         broker->redraw();
-        SDL_UpdateWindowSurface(gWindow);
+		
+	// Conditionals
+		if(shooting) {
+			if(BposY>640) {
+				shooting = false;
+			}
+			bullet->redraw();
+		}
+        
+		SDL_UpdateWindowSurface(gWindow);
     }
     close();
 

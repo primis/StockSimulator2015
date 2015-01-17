@@ -8,6 +8,7 @@ class entity
         ~entity();
 		void setBitmap(const char* bit);
         void setPosition(int x, int y);
+		void setSize(int w, int h);
         void redraw();
     private:
         SDL_Surface *bitmap;
