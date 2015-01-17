@@ -6,7 +6,8 @@ entity *broker;
 background *bg;
 entity *bullet;
 Mix_Music *bgm;
-
+Mix_Chunk *dropFX;
+Mix_Chunk *hitFX;
 bool loadMusic()
 {
     bgm      = NULL;
@@ -21,6 +22,8 @@ bool loadMusic()
     {
         printf("Failed to load BGM.wav\n");
     }
+    dropFX = Mix_LoadWAV("media/drop.wav");
+    hitFX  = Mix_LoadWAV("media/hit.wav");
     return true;
 }
 

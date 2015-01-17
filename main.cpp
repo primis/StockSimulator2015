@@ -8,6 +8,8 @@ extern bool loadMedia();
 
 
 extern Mix_Music *bgm;
+extern Mix_Chunk *hitFX, *dropFX;
+
 extern SDL_Window *gWindow;
 extern SDL_Surface *gScreenSurface;
 extern entity *broker;
@@ -33,7 +35,9 @@ int main()
 	int posY=200;
 	int BposX, BposY;
 	bool shooting = false;
-	broker->setPosition(posX,posY);
+	bool shootsound = false;
+
+    broker->setPosition(posX,posY);
     SDL_UpdateWindowSurface(gWindow);    
 	while(!quit) {
         while(SDL_PollEvent(&e) != 0){
@@ -64,7 +68,8 @@ int main()
 			shooting = true;
 			BposX = posX+2;
 			BposY = posY+2;
-		}
+		    shootsound = true;
+        }
 
 		// Render Time, 1 ms delay.
 	//	SDL_Delay(1);
@@ -94,9 +99,13 @@ int main()
 		}
         
 		SDL_UpdateWindowSurface(gWindow);
-        if(Mix_PlayingMusic() == 0)
-        {
+     // Sound
+        if(Mix_PlayingMusic() == 0) {
             Mix_PlayMusic(bgm, -1);
+        }
+        if(shootsound) {
+            shootsound = false;
+            Mix_PlayChannel(-1, dropFX, 0);
         }
     }
     close();
@@ -111,6 +120,8 @@ void close()
     delete bg;
 
     Mix_FreeMusic(bgm);
+    Mix_FreeChunk(dropFX);
+    Mix_FreeChunk(hitFX);
 
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
