@@ -27,7 +27,8 @@ int main()
     bg->redraw();
     broker->redraw();
     int posX=0;
-	broker->setPosition(posX,200);
+	int posY=200;
+	broker->setPosition(posX,posY);
     SDL_UpdateWindowSurface(gWindow);    
 	while(!quit) {
         while(SDL_PollEvent(&e) != 0){
@@ -36,12 +37,24 @@ int main()
                 quit = true;
             }
         }
-
-        SDL_Delay(15);
-        if(posX>640) {
-            posX=-63;
-        }
-        broker->setPosition(posX++,200);
+		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+		if(currentKeyStates[SDL_SCANCODE_UP])
+		{
+			posY--;
+		}		
+		if(currentKeyStates[SDL_SCANCODE_DOWN])
+		{
+			posY++;
+		}
+		if(currentKeyStates[SDL_SCANCODE_LEFT])
+		{
+			posX--;
+		}
+		if(currentKeyStates[SDL_SCANCODE_RIGHT])
+		{
+			posX++;
+		}
+        broker->setPosition(posX,posY);
         bg->redraw();
         broker->redraw();
         SDL_UpdateWindowSurface(gWindow);
