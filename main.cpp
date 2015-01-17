@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
-
+#include <SDL2/SDL_mixer.h>
 #include "sim.h"
 
 extern bool init();
 extern bool loadMedia();
 
+
+extern Mix_Music *bgm;
 extern SDL_Window *gWindow;
 extern SDL_Surface *gScreenSurface;
 extern entity *broker;
@@ -92,6 +94,10 @@ int main()
 		}
         
 		SDL_UpdateWindowSurface(gWindow);
+        if(Mix_PlayingMusic() == 0)
+        {
+            Mix_PlayMusic(bgm, -1);
+        }
     }
     close();
 
@@ -101,8 +107,13 @@ int main()
 void close()
 {
     delete broker; 
+    delete bullet;
+    delete bg;
+
+    Mix_FreeMusic(bgm);
 
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
+    Mix_Quit();
     SDL_Quit();
 }

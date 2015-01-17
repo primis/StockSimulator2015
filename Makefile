@@ -7,7 +7,9 @@ OBJS		= $(CPP_SOURCES:.cpp=.o)
 
 CC 			= g++
 CPP_FLAGS	= -w
-LINK_FLAGS	= -lSDL2
+LINK_FLAGS	= -lSDL2 -lSDL2_mixer
 
 all : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINK_FLAGS) -o StockSimulator2015
+clean:
+	rm *.o
