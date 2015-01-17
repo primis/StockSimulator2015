@@ -24,5 +24,30 @@ class background
     private:
         entity *bgarray[10][8];
 };
+class fchar
+{
+	public:
+		fchar(char c, int, int, bool);
+		~fchar();
+		void redraw();
+	private:
+		entity *letter;
+};
+class fstring
+{
+    public:
+        fstring();
+        ~fstring();
+		void setText(const char *, bool);
+		void setPosition(int x, int y);
+        void redraw();
+        bool isHit(int x, int y);
+    private:
+        int posX;
+        int posY;
+        char const *inttext;
+        fchar *charArray[32];
+};
+
 
 #endif

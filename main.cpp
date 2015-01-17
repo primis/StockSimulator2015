@@ -16,7 +16,7 @@ extern entity *broker;
 extern background *bg;
 extern entity *bullet;
 void close();
-
+fstring *score;
 
 int main()
 {
@@ -29,16 +29,17 @@ int main()
             printf("Failed to load media!\n");
         }
     }
-    bg->redraw();
-    broker->redraw();
-    int posX=0;
-	int posY=200;
+    
+	score = new fstring();
+    int posX=300;
+	int posY=0;
 	int BposX, BposY;
 	bool shooting = false;
 	bool shootsound = false;
+    bool hitsound = false;
 
     broker->setPosition(posX,posY);
-    SDL_UpdateWindowSurface(gWindow);    
+    SDL_UpdateWindowSurface(gWindow);
 	while(!quit) {
         while(SDL_PollEvent(&e) != 0){
             //User Requested a quit
@@ -90,14 +91,18 @@ int main()
 		}
 		if(posX<0) {
 			posX=0;
-		}
+		}		
+
+
+        score->redraw();	
+
+	
 		if(shooting) {
 			if(BposY>640) {
 				shooting = false;
 			}
 			bullet->redraw();
 		}
-        
 		SDL_UpdateWindowSurface(gWindow);
      // Sound
         if(Mix_PlayingMusic() == 0) {
@@ -106,6 +111,10 @@ int main()
         if(shootsound) {
             shootsound = false;
             Mix_PlayChannel(-1, dropFX, 0);
+        }
+        if(hitsound) {
+            hitsound = false;
+            Mix_PlayChannel(-1, hitFX, 0);
         }
     }
     close();
@@ -118,7 +127,7 @@ void close()
     delete broker; 
     delete bullet;
     delete bg;
-
+	delete score;
     Mix_FreeMusic(bgm);
     Mix_FreeChunk(dropFX);
     Mix_FreeChunk(hitFX);

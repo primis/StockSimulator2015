@@ -12,8 +12,8 @@ entity::~entity()
 entity::entity()
 {
     bitmap = NULL;
-    location.y = 200;
-    location.x = 200;
+    location.y = 120;
+    location.x = 0;
     location.h = 64;
     location.w = 64;
 	bitmap = SDL_LoadBMP("media/broker.bmp");
