@@ -12,6 +12,8 @@ void close();
 
 int main()
 {
+    bool quit = false;
+    SDL_Event e;
     if(!init()){
         printf("Failed to init!\n");
     } else {
@@ -20,8 +22,18 @@ int main()
         } else {
             SDL_BlitSurface(broker, NULL, gScreenSurface, NULL);
             SDL_UpdateWindowSurface(gWindow);
-            SDL_Delay(4000);
         }
+    }
+    
+    while(!quit) {
+        while(SDL_PollEvent(&e) != 0){
+            //User Requested a quit
+            if(e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
+        SDL_BlitSurface(broker, NULL, gScreenSurface, NULL);
+        SDL_UpdateWindowSurface(gWindow);
     }
     close();
 
