@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
-#include <stdlib.h>
 #include "sim.h"
 
 extern bool init();
@@ -15,32 +11,42 @@ extern SDL_Surface *gScreenSurface;
 extern entity *broker;
 extern background *bg;
 extern entity *bullet;
+
 bool quit = false;
 void close();
 fstring *score;
-stock *ticker[1000000]; // Maximize! of them out at once on the feild.
+stock *ticker[1000]; // Maximize! of them out at once on the feild.
 int last_stock;
+int numscore = 0;
 Uint32 start = 0;
 int launch;
+unsigned int times = 600;
 
 void game_over()
 {
 	bg->redraw();
 	fstring *over = new fstring;
-	over->setPosition(200,200);
+	over->setPosition(300,200);
 	over->setText("game over", true);
+	over->redraw();
     SDL_UpdateWindowSurface(gWindow);
 	SDL_Delay(5000);	
+	printf("Score: %d\n", numscore);
 	quit = true;
 }
 
 void launchAStock()
 {
-	printf("Launching!\n");
-	if(last_stock<10) {
+	times--;
+	if(times > 50) {
+		times = 50;
+	}
+	int i;
+	if(last_stock<9) {
 		ticker[last_stock++] = new stock;
-	} else {
-		int i;
+	} 
+    
+    else {
 		for(i=0;i<10;i++) {
 			if(ticker[i] == NULL) {
 				ticker[i] = new stock;
@@ -98,10 +104,6 @@ int main()
 		{
 			posX+=2;
 		}
-		if(currentKeyStates[SDL_SCANCODE_A])
-		{
-			launchAStock();
-		}
 		if(currentKeyStates[SDL_SCANCODE_SPACE])
 		{
 			shooting = true;
@@ -113,7 +115,6 @@ int main()
 		bullet->setPosition(BposX,BposY++);
         bg->redraw();
         broker->redraw();
-		
 	// Conditionals
 		if(posY>240) {
 			posY=240;
@@ -135,7 +136,7 @@ int main()
                     tempbool = ticker[s]->isHit(BposX+8,BposY+10);
                     if(tempbool) {
                         delete ticker[s];
-                        ticker[s] = NULL;
+                        ticker[s] = new stock;
                         hitsound = true;
 						continue;
                     }
@@ -143,24 +144,29 @@ int main()
                 tempbool = ticker[s]->rise(posX,posY);
                 if(!tempbool) {
 					if(ticker[s]->getValue()<0) {                    
-						game_over();
+						if((ticker[s]->getY()) > 0) {						
+							game_over();
+						} else {
+								shootsound=true;							
+							//delete ticker[s];
+							ticker[s] = new stock;
+							continue;						
+						}
 					} else {
-						score += ticker[s]->getValue();
+						numscore += ticker[s]->getValue();
 						delete ticker[s];
-						ticker[s] = NULL;
+						ticker[s] = new stock;
 						continue;
 					}		
                 }
 				//SDL_Delay(1);                
 				ticker[s]->redraw();
+					
             }
-			if(SDL_GetTicks() - start > launch) {
-				launchAStock();
-				start = SDL_GetTicks();
-				//launch = rand() % 300 * 10;
-			}	
         }
-        
+   		if(SDL_GetTicks()%50 == 0) {
+			launchAStock();
+		}
         score->redraw();	
 
 	

@@ -1,6 +1,9 @@
 #ifndef __sim_h
 #define __sim_h
-
+#include <stdio.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#include <stdlib.h>
 class entity
 {
     public:
@@ -58,6 +61,7 @@ class stock
 		bool rise(int x, int y);
 		bool isHit(int x, int y);
 		int getValue();
+		int getY();
 	private:
 		int vale;
 		fstring *name;

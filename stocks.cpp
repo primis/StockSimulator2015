@@ -1,6 +1,4 @@
-#include <SDL2/SDL.h>
 #include "sim.h"
-#include <stdlib.h>
 
 const char *symbol[] = {
 "mmm","joy","cov","pgr","brcm","nem","gci","trip","aon","mas","emr","so","ctsh",
@@ -81,28 +79,22 @@ int stock::getValue()
 {
     return vale;
 }
-
+int stock::getY()
+{
+	return posY;
+}
 bool stock::rise(int x, int y)
 {
-    if(y<posY) {
-        posY -= 1;
-        if(x>posX) {
-            posX += 1;
-        } else {
-            posX -= 1;
-        }
-    } else if(y>posY) {
-        posY-=2;
-        if(y>0) {
-            return false;
-        }
-    } else {
-        if (posX==x) { // Hit! Game over!
-            return false;
-        }
-    }
+	posY--;
+	
+	if((posY > (y + 32)) && (posY < y)) {
+		if((x > posX) && (x < posX + 12)) {
+			return false;
+		}
+	}
+	if (posY < 0) {
+		return false;
+	}
     return true;
 }
-
-
 

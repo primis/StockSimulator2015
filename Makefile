@@ -10,6 +10,6 @@ CPP_FLAGS	= -w
 LINK_FLAGS	= -lSDL2 -lSDL2_mixer
 
 all : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINK_FLAGS) -o StockSimulator2015
+	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINK_FLAGS) -o StockMarketSimulator2015
 clean:
 	rm *.o

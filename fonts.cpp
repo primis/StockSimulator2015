@@ -1,5 +1,3 @@
-#include <SDL2/SDL.h>
-#include <string.h>
 #include "sim.h"
 /*
 
@@ -54,15 +52,11 @@ void fstring::redraw()
 
 bool fstring::isHit(int x, int y) 
 {
-    if(x > posX) {
-        if(x < (posX+(strlen(inttext)*15))) {
-            if(y > posY) {
-                if(y < posY+15) {
-                    return true;
-                }
-            }
-        }
-    }
+	if((y > posY) && (y < posY+15)) {
+		if((x > posX) && (posX < x + (strlen(inttext)*15)))  {		
+			return true;
+		}
+	}
     return false;
 }
 

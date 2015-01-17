@@ -1,4 +1,3 @@
-#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <time.h>
 #include "sim.h"
@@ -47,7 +46,7 @@ bool init()
 	intro2->redraw();
 	intro3->redraw();
 	SDL_UpdateWindowSurface(gWindow);
-	SDL_Delay(7000);
+	SDL_Delay(5000);
     return success;
 }
 
