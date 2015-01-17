@@ -49,5 +49,21 @@ class fstring
         fchar *charArray[32];
 };
 
+class stock
+{
+	public:
+		stock();
+		~stock();
+		void redraw();
+		bool rise(int x, int y);
+		bool isHit(int x, int y);
+		int getValue();
+	private:
+		int vale;
+		fstring *name;
+		int symbolID;
+		int posY;
+		int posX;
+};
 
 #endif

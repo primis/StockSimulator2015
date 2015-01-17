@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <time.h>
 #include "sim.h"
 
 const int SCREEN_WIDTH = 640;
@@ -12,8 +13,8 @@ SDL_Surface *gScreenSurface = NULL;
 bool init()
 {
     bool success = true;
-
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)>0) {
+	srand (time(NULL));
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO |  SDL_INIT_TIMER)>0) {
         printf("SDL ERRORL %s\n",SDL_GetError());
         success = false;
     } else {

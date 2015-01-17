@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <stdlib.h>
 #include "sim.h"
 
 extern bool init();
 extern bool loadMedia();
-
 
 extern Mix_Music *bgm;
 extern Mix_Chunk *hitFX, *dropFX;
@@ -15,12 +15,44 @@ extern SDL_Surface *gScreenSurface;
 extern entity *broker;
 extern background *bg;
 extern entity *bullet;
+bool quit = false;
 void close();
 fstring *score;
+stock *ticker[1000000]; // Maximize! of them out at once on the feild.
+int last_stock;
+Uint32 start = 0;
+int launch;
+
+void game_over()
+{
+	bg->redraw();
+	fstring *over = new fstring;
+	over->setPosition(200,200);
+	over->setText("game over", true);
+    SDL_UpdateWindowSurface(gWindow);
+	SDL_Delay(5000);	
+	quit = true;
+}
+
+void launchAStock()
+{
+	printf("Launching!\n");
+	if(last_stock<10) {
+		ticker[last_stock++] = new stock;
+	} else {
+		int i;
+		for(i=0;i<10;i++) {
+			if(ticker[i] == NULL) {
+				ticker[i] = new stock;
+				break;
+			}
+		}
+	}
+}
 
 int main()
 {
-    bool quit = false;
+    last_stock = 0;
     SDL_Event e;
     if(!init()){
         printf("Failed to init!\n");
@@ -30,6 +62,9 @@ int main()
         }
     }
     
+	start = SDL_GetTicks();
+	launch = 500;	
+
 	score = new fstring();
     int posX=300;
 	int posY=0;
@@ -37,7 +72,6 @@ int main()
 	bool shooting = false;
 	bool shootsound = false;
     bool hitsound = false;
-
     broker->setPosition(posX,posY);
     SDL_UpdateWindowSurface(gWindow);
 	while(!quit) {
@@ -50,19 +84,23 @@ int main()
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 		if(currentKeyStates[SDL_SCANCODE_UP])
 		{
-			posY--;
+			posY-=2;
 		}		
 		if(currentKeyStates[SDL_SCANCODE_DOWN])
 		{
-			posY++;
+			posY+=2;
 		}
 		if(currentKeyStates[SDL_SCANCODE_LEFT])
 		{
-			posX--;
+			posX-=2;
 		}
 		if(currentKeyStates[SDL_SCANCODE_RIGHT])
 		{
-			posX++;
+			posX+=2;
+		}
+		if(currentKeyStates[SDL_SCANCODE_A])
+		{
+			launchAStock();
 		}
 		if(currentKeyStates[SDL_SCANCODE_SPACE])
 		{
@@ -71,9 +109,6 @@ int main()
 			BposY = posY+2;
 		    shootsound = true;
         }
-
-		// Render Time, 1 ms delay.
-	//	SDL_Delay(1);
         broker->setPosition(posX,posY);		
 		bullet->setPosition(BposX,BposY++);
         bg->redraw();
@@ -92,8 +127,40 @@ int main()
 		if(posX<0) {
 			posX=0;
 		}		
-
-
+        int s;
+        bool tempbool;
+        for(s=0;s<last_stock;s++) {
+            if(ticker[s] != NULL) {
+          		if(shooting) {
+                    tempbool = ticker[s]->isHit(BposX+8,BposY+10);
+                    if(tempbool) {
+                        delete ticker[s];
+                        ticker[s] = NULL;
+                        hitsound = true;
+						continue;
+                    }
+                }
+                tempbool = ticker[s]->rise(posX,posY);
+                if(!tempbool) {
+					if(ticker[s]->getValue()<0) {                    
+						game_over();
+					} else {
+						score += ticker[s]->getValue();
+						delete ticker[s];
+						ticker[s] = NULL;
+						continue;
+					}		
+                }
+				//SDL_Delay(1);                
+				ticker[s]->redraw();
+            }
+			if(SDL_GetTicks() - start > launch) {
+				launchAStock();
+				start = SDL_GetTicks();
+				//launch = rand() % 300 * 10;
+			}	
+        }
+        
         score->redraw();	
 
 	
