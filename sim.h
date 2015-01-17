@@ -14,4 +14,14 @@ class entity
         SDL_Rect location;
 };
 
+class background
+{
+    public:
+        background();
+        ~background();
+        void redraw();
+    private:
+        entity *bgarray[10][8];
+};
+
 #endif

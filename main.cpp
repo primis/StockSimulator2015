@@ -9,6 +9,7 @@ extern bool loadMedia();
 extern SDL_Window *gWindow;
 extern SDL_Surface *gScreenSurface;
 extern entity *broker;
+extern background *bg;
 void close();
 
 
@@ -23,6 +24,7 @@ int main()
             printf("Failed to load media!\n");
         }
     }
+    bg->redraw();
     broker->redraw();
 	SDL_UpdateWindowSurface(gWindow);    
 	while(!quit) {
