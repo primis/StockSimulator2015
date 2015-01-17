@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include "sim.h"
+
 extern bool init();
 extern bool loadMedia();
 
 extern SDL_Window *gWindow;
 extern SDL_Surface *gScreenSurface;
-extern SDL_Surface *broker;
-
+extern entity *broker;
 void close();
 
-SDL_Rect brokerLoc;
 
 int main()
 {
@@ -21,23 +21,17 @@ int main()
     } else {
         if(!loadMedia()) {
             printf("Failed to load media!\n");
-        } else {
-            SDL_BlitSurface(broker, NULL, gScreenSurface, NULL);
-            SDL_UpdateWindowSurface(gWindow);
         }
     }
-    brokerLoc.w = 64;
-    brokerLoc.h = 64;
-    brokerLoc.x = 200;
-    brokerLoc.y = 200;
-    while(!quit) {
+    broker->redraw();
+	SDL_UpdateWindowSurface(gWindow);    
+	while(!quit) {
         while(SDL_PollEvent(&e) != 0){
             //User Requested a quit
             if(e.type == SDL_QUIT) {
                 quit = true;
             }
         }
-        SDL_BlitSurface(broker, NULL, gScreenSurface, &brokerLoc);
         SDL_UpdateWindowSurface(gWindow);
     }
     close();
@@ -47,8 +41,7 @@ int main()
 
 void close()
 {
-    SDL_FreeSurface(broker);
-    broker = NULL;
+    delete broker; 
 
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;

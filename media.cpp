@@ -1,15 +1,11 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
-
-SDL_Surface *broker = NULL;
+#include "sim.h"
+entity *broker;
 
 bool loadMedia()
 {
     bool success = true;
-    broker  = SDL_LoadBMP("media/broker.bmp");
-    if(broker == NULL) {
-        printf("Unable to find \"broker.bmp\"");
-        success = false;
-    }
+	broker = new entity;
     return success;
 }
