@@ -26,7 +26,9 @@ int main()
     }
     bg->redraw();
     broker->redraw();
-	SDL_UpdateWindowSurface(gWindow);    
+    int posX=0;
+	broker->setPosition(posX,200);
+    SDL_UpdateWindowSurface(gWindow);    
 	while(!quit) {
         while(SDL_PollEvent(&e) != 0){
             //User Requested a quit
@@ -34,6 +36,14 @@ int main()
                 quit = true;
             }
         }
+
+        SDL_Delay(15);
+        if(posX>640) {
+            posX=-63;
+        }
+        broker->setPosition(posX++,200);
+        bg->redraw();
+        broker->redraw();
         SDL_UpdateWindowSurface(gWindow);
     }
     close();
