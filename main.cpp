@@ -72,6 +72,18 @@ int main()
         broker->redraw();
 		
 	// Conditionals
+		if(posY>240) {
+			posY=240;
+		}	// Hardline bottom at 320
+		if(posY<0) {
+			posY=0;
+		}		
+		if(posX>624) {
+			posX=624;
+		}
+		if(posX<0) {
+			posX=0;
+		}
 		if(shooting) {
 			if(BposY>640) {
 				shooting = false;
