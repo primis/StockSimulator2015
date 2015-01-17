@@ -10,5 +10,4 @@ CPP_FLAGS	= -w
 LINK_FLAGS	= -lSDL2
 
 all : $(OBJS)
-	$(CC) $(OBJS) $(CPP_FLAGS) $(LINK_FLAGS) -o StockSimulator2015
-
+	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINK_FLAGS) -o StockSimulator2015
