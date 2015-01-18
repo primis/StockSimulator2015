@@ -45,7 +45,7 @@ const char *symbol[] = {
 stock::stock()
 {
     posX     = rand() % 630;
-    vale     = rand() % 30-25;
+    vale     = (rand() % 30-20)*10;
     vale    *= 10;
     symbolID = rand() % 500;
     posY     = 460;
@@ -63,10 +63,10 @@ void stock::redraw()
 	char tempbuff[16];
     name->setPosition(posX, posY);
 	if(vale < 0) {
-		sprintf(tempbuff,"%s%d",symbol[symbolID], vale);		
+		sprintf(tempbuff,"%s",symbol[symbolID]);		
         name->setText(tempbuff,true);
 	} else {
-		sprintf(tempbuff,"%d", vale);
+		sprintf(tempbuff,"s%d", vale);
         name->setText(tempbuff,false);
     }
     name->redraw();
@@ -89,8 +89,8 @@ bool stock::rise(int x, int y)
 {
 	posY--;
 	
-	if((posY > (y + 32)) && (posY < y)) {
-		if((x > posX) && (x < posX + 12)) {
+	if((posY < (y + 64)) && (posY >= y)) {
+		if((posX < (x + 64)) && (posX >= x)) {
 			return false;
 		}
 	}

@@ -18,7 +18,7 @@ fstring *score;
 fstring *ticktoc;
 stock *ticker[1000]; // Maximize! of them out at once on the feild.
 int last_stock;
-int numscore = 0;
+int numscore = 10000;
 Uint32 start = 0;
 int launch;
 unsigned int times = 600;
@@ -27,12 +27,20 @@ void game_over()
 {
 	bg->redraw();
 	fstring *over = new fstring;
-	over->setPosition(300,200);
+	
+	char buff[50];	
+	over->setPosition(240,200);
 	over->setText("game over", true);
+	if(numscore > 0) {
+		sprintf(buff, "score %d", numscore);
+	} else {
+		sprintf(buff, "you went bankrupt");
+	}
+	score->setText(buff,true);
 	score->redraw();
 	over->redraw();
     SDL_UpdateWindowSurface(gWindow);
-	SDL_Delay(5000);	
+	SDL_Delay(5000);
 	printf("Score: %d\n", numscore);
 	quit = true;
 }
@@ -69,7 +77,10 @@ int main()
             printf("Failed to load media!\n");
         }
     }
-    
+    int i;
+	for(i=0;i<1000;i++) {
+		ticker[i] = NULL;	
+	}
 	start = SDL_GetTicks();
 	launch = 500;	
 	ticktoc = new fstring();
@@ -106,6 +117,10 @@ int main()
 		{
 			posX+=2;
 		}
+		if(currentKeyStates[SDL_SCANCODE_Q])
+		{
+			game_over();
+		}
 		if(currentKeyStates[SDL_SCANCODE_SPACE])
 		{
 			shooting = true;
@@ -141,10 +156,11 @@ int main()
           		if(shooting) {
                     tempbool = ticker[s]->isHit(BposX+8,BposY+10);
                     if(tempbool) {
-                        hitsound = true;
-                        if(ticker[s]->getValue() < 0)
-                            numscore += (ticker[s]->getValue() / 5);
-                        delete ticker[s];
+                        if(ticker[s]->getValue() < 0) {				
+                            hitsound = true;
+                            numscore += (-1*(ticker[s]->getValue() / 5));					
+						}                        
+						delete ticker[s];
                         ticker[s] = new stock;
 						continue;
                     }
@@ -153,6 +169,7 @@ int main()
                 if(!tempbool) {
 					if(ticker[s]->getY() > 5) {
                     	numscore += ticker[s]->getValue();
+						hitsound = true;
 					}
                     delete ticker[s];
                     ticker[s] = new stock;
@@ -161,6 +178,10 @@ int main()
 				ticker[s]->redraw();		
             }
         }
+		if(numscore < 0) {
+			numscore = -1;
+			game_over();
+		}	
    		if(SDL_GetTicks()%50 == 0) {
 			launchAStock();
 		}
@@ -207,6 +228,7 @@ void close()
     delete bullet;
     delete bg;
 	delete score;
+	delete ticktoc;
     Mix_FreeMusic(bgm);
     Mix_FreeChunk(dropFX);
     Mix_FreeChunk(hitFX);

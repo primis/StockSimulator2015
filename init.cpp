@@ -36,11 +36,11 @@ bool init()
 	title->setPosition(150,50);
 		title->setText("stock market simulator 2015", true);
 	intro->setPosition(180,100);
-		intro->setText("collect the green stocks", true);
-	intro2->setPosition(200,120);	
-		intro2->setText("destroy the red ones", true);
-	intro3->setPosition(250,140);
-		intro3->setText("good luck", true);
+		intro->setText("collect the money", true);
+	intro2->setPosition(150,120);	
+		intro2->setText("avoid the toxic asset stocks", true);
+	intro3->setPosition(200,140);
+		intro3->setText("watch the timer", true);
 	title->redraw();	
 	intro->redraw();
 	intro2->redraw();
