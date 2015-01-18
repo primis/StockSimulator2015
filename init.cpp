@@ -18,7 +18,7 @@ bool init()
         success = false;
     } else {
         gWindow = SDL_CreateWindow("Stock Market Simulator 2015", SDL_WINDOWPOS_UNDEFINED,
-         SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+         SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_FULLSCREEN /*SDL_WINDOW_SHOWN*/);
         if(gWindow == NULL) {
             printf("Window Could not be created! SDL_ERROR: %s\n",SDL_GetError());
             success = false;
