@@ -45,7 +45,8 @@ const char *symbol[] = {
 stock::stock()
 {
     posX     = rand() % 630;
-    vale    = rand() % 30-15;
+    vale     = rand() % 30-25;
+    vale    *= 10;
     symbolID = 5;
     posY     = 460;
     name     = new fstring;

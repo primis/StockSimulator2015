@@ -15,6 +15,7 @@ extern entity *bullet;
 bool quit = false;
 void close();
 fstring *score;
+fstring *ticktoc;
 stock *ticker[1000]; // Maximize! of them out at once on the feild.
 int last_stock;
 int numscore = 0;
@@ -28,6 +29,7 @@ void game_over()
 	fstring *over = new fstring;
 	over->setPosition(300,200);
 	over->setText("game over", true);
+	score->redraw();
 	over->redraw();
     SDL_UpdateWindowSurface(gWindow);
 	SDL_Delay(5000);	
@@ -70,9 +72,9 @@ int main()
     
 	start = SDL_GetTicks();
 	launch = 500;	
-
-	score = new fstring();
-    int posX=300;
+	ticktoc = new fstring();
+	score = new fstring();  
+	int posX=300;
 	int posY=0;
 	int BposX, BposY;
 	bool shooting = false;
@@ -110,12 +112,14 @@ int main()
 			BposX = posX+2;
 			BposY = posY+2;
 		    shootsound = true;
-        }
-        broker->setPosition(posX,posY);		
-		bullet->setPosition(BposX,BposY++);
-        bg->redraw();
-        broker->redraw();
-	// Conditionals
+        }      
+		broker->setPosition(posX,posY);		
+		BposY += 4;
+        bullet->setPosition(BposX,BposY);
+			bg->redraw();  
+            broker->redraw();
+        
+        // Conditionals
 		if(posY>240) {
 			posY=240;
 		}	// Hardline bottom at 320
@@ -128,6 +132,8 @@ int main()
 		if(posX<0) {
 			posX=0;
 		}		
+        
+        
         int s;
         bool tempbool;
         for(s=0;s<last_stock;s++) {
@@ -135,41 +141,38 @@ int main()
           		if(shooting) {
                     tempbool = ticker[s]->isHit(BposX+8,BposY+10);
                     if(tempbool) {
+                        hitsound = true;
+                        if(ticker[s]->getValue() < 0)
+                            numscore += (ticker[s]->getValue() / 5);
                         delete ticker[s];
                         ticker[s] = new stock;
-                        hitsound = true;
 						continue;
                     }
                 }
                 tempbool = ticker[s]->rise(posX,posY);
                 if(!tempbool) {
-					if(ticker[s]->getValue()<0) {                    
-						if((ticker[s]->getY()) > 0) {						
-							game_over();
-						} else {
-								shootsound=true;							
-							//delete ticker[s];
-							ticker[s] = new stock;
-							continue;						
-						}
-					} else {
-						numscore += ticker[s]->getValue();
-						delete ticker[s];
-						ticker[s] = new stock;
-						continue;
-					}		
-                }
-				//SDL_Delay(1);                
-				ticker[s]->redraw();
-					
+					if(ticker[s]->getY() > 5) {
+                    	numscore += ticker[s]->getValue();
+					}
+                    delete ticker[s];
+                    ticker[s] = new stock;
+                    continue;
+                }           
+				ticker[s]->redraw();		
             }
         }
    		if(SDL_GetTicks()%50 == 0) {
 			launchAStock();
 		}
-        score->redraw();	
+        char tempbuff[25];
+        sprintf(tempbuff,"score %09d",numscore);
+            score->setText(tempbuff,true);
+            score->redraw();	
+        sprintf(tempbuff,"time %04d",(SDL_GetTicks()/10)-600);
+	        ticktoc->setPosition(400,0);
+            ticktoc->setText(tempbuff,true);
+            ticktoc->redraw();
 
-	
 		if(shooting) {
 			if(BposY>640) {
 				shooting = false;
@@ -189,6 +192,9 @@ int main()
             hitsound = false;
             Mix_PlayChannel(-1, hitFX, 0);
         }
+		if(SDL_GetTicks() > 81000) {
+			game_over();
+		}
     }
     close();
 
