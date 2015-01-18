@@ -47,7 +47,7 @@ stock::stock()
     posX     = rand() % 630;
     vale     = (rand() % 30-20)*10;
     vale    *= 10;
-    symbolID = rand() % 500;
+    symbolID = rand() % 450;
     posY     = 460;
     name     = new fstring;
     name->setPosition(posX, posY);
@@ -62,6 +62,9 @@ void stock::redraw()
 {
 	char tempbuff[16];
     name->setPosition(posX, posY);
+	if(vale == 0) {
+		vale = 100;
+	}
 	if(vale < 0) {
 		sprintf(tempbuff,"%s",symbol[symbolID]);		
         name->setText(tempbuff,true);
