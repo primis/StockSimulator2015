@@ -25,22 +25,32 @@ unsigned int times = 600;
 
 void game_over()
 {
+	bool blink = true;
+	int x = 0;
 	bg->redraw();
 	fstring *over = new fstring;
 	
 	char buff[50];	
 	over->setPosition(240,200);
 	over->setText("game over", true);
-	if(numscore > 0) {
-		sprintf(buff, "score %d", numscore);
-	} else {
-		sprintf(buff, "you went bankrupt");
+	while(x < 20)	{
+		x++;
+		if(numscore > 0 && blink) {
+			sprintf(buff, "score %d", numscore);
+			blink = false;
+		} else if(numscore > 0) {
+			sprintf(buff, "score");
+			blink = true;
+		} else {
+			sprintf(buff, "you went bankrupt");
+		}
+		score->setPosition(0,0);
+		score->setText(buff,true);
+		score->redraw();
+		over->redraw();
+	    SDL_UpdateWindowSurface(gWindow);
+		SDL_Delay(250);
 	}
-	score->setText(buff,true);
-	score->redraw();
-	over->redraw();
-    SDL_UpdateWindowSurface(gWindow);
-	SDL_Delay(5000);
 	printf("Score: %d\n", numscore);
 	quit = true;
 }
