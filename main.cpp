@@ -29,8 +29,8 @@ void game_over()
 	int x = 0;
 	bg->redraw();
 	fstring *over = new fstring;
-	
-	char buff[50];	
+
+	char buff[50];
 	over->setPosition(240,200);
 	over->setText("game over", true);
 	while(x < 20)	{
@@ -64,8 +64,8 @@ void launchAStock()
 	int i;
 	if(last_stock<9) {
 		ticker[last_stock++] = new stock;
-	} 
-    
+	}
+
     else {
 		for(i=0;i<10;i++) {
 			if(ticker[i] == NULL) {
@@ -76,7 +76,7 @@ void launchAStock()
 	}
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     last_stock = 0;
     SDL_Event e;
@@ -89,12 +89,12 @@ int main()
     }
     int i;
 	for(i=0;i<1000;i++) {
-		ticker[i] = NULL;	
+		ticker[i] = NULL;
 	}
 	start = SDL_GetTicks();
-	launch = 500;	
+	launch = 500;
 	ticktoc = new fstring();
-	score = new fstring();  
+	score = new fstring();
 	int posX=300;
 	int posY=0;
 	int BposX, BposY;
@@ -114,7 +114,7 @@ int main()
 		if(currentKeyStates[SDL_SCANCODE_UP])
 		{
 			posY-=2;
-		}		
+		}
 		if(currentKeyStates[SDL_SCANCODE_DOWN])
 		{
 			posY+=2;
@@ -137,28 +137,28 @@ int main()
 			BposX = posX+2;
 			BposY = posY+2;
 		    shootsound = true;
-        }      
-		broker->setPosition(posX,posY);		
+        }
+		broker->setPosition(posX,posY);
 		BposY += 4;
         bullet->setPosition(BposX,BposY);
-			bg->redraw();  
+			bg->redraw();
             broker->redraw();
-        
+
         // Conditionals
 		if(posY>240) {
 			posY=240;
 		}	// Hardline bottom at 320
 		if(posY<0) {
 			posY=0;
-		}		
+		}
 		if(posX>624) {
 			posX=624;
 		}
 		if(posX<0) {
 			posX=0;
-		}		
-        
-        
+		}
+
+
         int s;
         bool tempbool;
         for(s=0;s<last_stock;s++) {
@@ -166,10 +166,10 @@ int main()
           		if(shooting) {
                     tempbool = ticker[s]->isHit(BposX+8,BposY+10);
                     if(tempbool) {
-                        if(ticker[s]->getValue() < 0) {				
+                        if(ticker[s]->getValue() < 0) {
                             hitsound = true;
-                            numscore += (-1*(ticker[s]->getValue() / 5));					
-						}                        
+                            numscore += (-1*(ticker[s]->getValue() / 5));
+						}
 						delete ticker[s];
                         ticker[s] = new stock;
 						continue;
@@ -184,21 +184,21 @@ int main()
                     delete ticker[s];
                     ticker[s] = new stock;
                     continue;
-                }           
-				ticker[s]->redraw();		
+                }
+				ticker[s]->redraw();
             }
         }
 		if(numscore < 0) {
 			numscore = -1;
 			game_over();
-		}	
+		}
    		if(SDL_GetTicks()%50 == 0) {
 			launchAStock();
 		}
         char tempbuff[25];
         sprintf(tempbuff,"score %09d",numscore);
             score->setText(tempbuff,true);
-            score->redraw();	
+            score->redraw();
         sprintf(tempbuff,"time %04d",(SDL_GetTicks()/10)-600);
 	        ticktoc->setPosition(400,0);
             ticktoc->setText(tempbuff,true);
@@ -231,10 +231,9 @@ int main()
 
     return 0;
 }
-
 void close()
 {
-    delete broker; 
+    delete broker;
     delete bullet;
     delete bg;
 	delete score;
